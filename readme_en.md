@@ -9,7 +9,7 @@
 
 ## Overview
 
-bk-audit-sdk is the SDK of blueking Audit Center (BK-AUDIT), your system can use BK-Audit easily via SDK.
+bk-audit-python-sdk is the Python SDK of blueking Audit Center (BK-AUDIT), your system can use BK-Audit easily via SDK.
 
 ## Features
 
