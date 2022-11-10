@@ -21,14 +21,14 @@ import os
 from bk_audit.client import BkAudit
 from bk_audit.contrib.opentelemetry.utils import ServiceNameHandler
 from bk_audit.log.exporters import LoggerExporter
-from tests.base.exporters import AsyncExporter
+from tests.base.exporters import DelayExporter
 
 app_code = os.getenv("BKAPP_APP_ID")
 app_secret = os.getenv("BKAPP_APP_SECRET")
 
 
 def init_client(exporters=None):
-    exporters = exporters or [AsyncExporter(), LoggerExporter()]
+    exporters = exporters or [DelayExporter(), LoggerExporter()]
     return BkAudit(
         bk_app_code=app_code,
         bk_app_secret=app_secret,

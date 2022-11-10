@@ -37,7 +37,7 @@ class BkAuditLog(object):
         self._queue = queue or AuditEventQueue()
         self._formatter = None
         self._sync_exporters = []
-        self._async_exporters = []
+        self._delay_exporters = []
         self._exporter_class = []
 
     def _check_init(self):
@@ -46,7 +46,7 @@ class BkAuditLog(object):
         """
         assert isinstance(self._queue, BaseQueue), "Queue Invalid"
         assert isinstance(self._formatter, BaseFormatter), "Formatter Invalid"
-        assert self._async_exporters or self._sync_exporters, "Exporter Unset"
+        assert self._delay_exporters or self._sync_exporters, "Exporter Unset"
 
     def set_queue_limit(self, limit):
         """
@@ -74,8 +74,8 @@ class BkAuditLog(object):
         if exporter.__class__ in self._exporter_class:
             warnings.warn("Exporter Duplicate")
         self._exporter_class.append(exporter.__class__)
-        if exporter.is_async:
-            self._async_exporters.append(exporter)
+        if exporter.is_delay:
+            self._delay_exporters.append(exporter)
         else:
             self._sync_exporters.append(exporter)
 
@@ -85,8 +85,8 @@ class BkAuditLog(object):
         """
         self._check_init()
         event = self._formatter.build_event(**kwargs)
-        # 存在异步导出的则需要将日志添加到队列
-        if self._async_exporters:
+        # 存在延迟导出的则需要将日志添加到队列
+        if self._delay_exporters:
             self._queue.add(event)
         # 同步导出的直接调用
         for exporter in self._sync_exporters:
@@ -98,5 +98,5 @@ class BkAuditLog(object):
         """
         self._check_init()
         events = self._queue.pop_all()
-        for exporter in self._async_exporters:
+        for exporter in self._delay_exporters:
             exporter.export(events)

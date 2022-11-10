@@ -29,7 +29,7 @@ class BaseExporter(object):
 
     @property
     @abc.abstractmethod
-    def is_async(self):
+    def is_delay(self):
         """
         True: 日志输入后直接导出
         False: 日志输入后，等待调用 BkAuditLog.export_events 时导出
@@ -52,7 +52,7 @@ class LoggerExporter(BaseExporter):
     日志导出
     """
 
-    is_async = False
+    is_delay = False
 
     def export(self, events):
         """
