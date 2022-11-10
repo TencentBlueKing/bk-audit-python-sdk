@@ -25,7 +25,7 @@ from bk_audit.log.formatters import BaseFormatter, Formatter
 from bk_audit.log.models import AuditContext, AuditEvent
 from tests.base.client import init_client
 from tests.base.constants import CONTEXT, HOST, HOST_INSTANCE, VIEW_FILE
-from tests.base.exporters import AsyncExporter
+from tests.base.exporters import DelayExporter
 
 
 class TestClient(TestCase):
@@ -59,7 +59,7 @@ class TestClient(TestCase):
         """测试添加事件输出"""
         # 添加输出
         self.client.add_exporter(LoggerExporter())
-        self.client.add_exporter(AsyncExporter())
+        self.client.add_exporter(DelayExporter())
         self.assertEqual(len(self.client._log._exporter_class), 4)
 
     def test_set_queue_limit(self):
@@ -108,7 +108,7 @@ class TestClient(TestCase):
         """测试基础导出"""
         exporter = BaseExporter()
         exporter.export([])
-        self.assertEqual(exporter.is_async, None)
+        self.assertEqual(exporter.is_delay, None)
 
     def test_model_str(self):
         """测试ModelStr"""

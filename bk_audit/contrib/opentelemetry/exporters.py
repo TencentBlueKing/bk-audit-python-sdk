@@ -28,7 +28,7 @@ class OTLogExporter(BaseExporter):
     OT日志输出
     """
 
-    is_async = False
+    is_delay = False
 
     def _trans_json(self, data):
         for key, val in data.items():

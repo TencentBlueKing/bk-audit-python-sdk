@@ -19,7 +19,7 @@ to the current version of the project delivered to anyone in the future.
 from bk_audit.log.exporters import LoggerExporter
 
 
-class AsyncExporter(LoggerExporter):
-    """异步输出"""
+class DelayExporter(LoggerExporter):
+    """延迟输出"""
 
-    is_async = True
+    is_delay = True

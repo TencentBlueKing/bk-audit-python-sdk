@@ -22,7 +22,7 @@ from bk_audit.log.exporters import BaseExporter
 class ConsoleExporter(BaseExporter):
     """终端输出"""
 
-    is_async = False
+    is_delay = False
 
     def export(self, events):
         """

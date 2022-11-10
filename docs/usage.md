@@ -200,7 +200,7 @@ bk_audit_client.add_event(action=VIEW_FILE, resource_type=HOST, audit_context=co
 ### 自定义 Exporter
 
 审计事件默认会使用 logger(name=bk_audit) 输出，也可以定义自己的输出 Exporter   
-is_async 参数用于控制是否为同步输出   
+is_delay 参数用于控制是否为同步输出   
 若为 False，在 AuditEvent 产生后，立刻调用Exporter 输出   
 若为 True，则需要在代码中调用 client.export_events 方法输出，这一部分会在后续内容介绍
 
@@ -209,7 +209,7 @@ from bk_audit.log.exporters import BaseExporter
 
 
 class ConsoleExporter(BaseExporter):
-    is_async = False
+    is_delay = False
 
     def export(self, events):
         for event in events:
@@ -227,14 +227,14 @@ bk_audit_client = BkAudit(
 )
 ```
 
-当使用到了异步输出的 Exporter 时(即is_async=True)，需要在代码中调用 export_events 方法输出   
-例如，在 Django 项目中，使用了异步 Exporter，此时可以在中间件中 process_response 时输出
+当使用到了延迟输出的 Exporter 时(is_delay=True)，需要在代码中调用 export_events 方法输出   
+例如，在 Django 项目中，使用了延迟 Exporter，此时可以在中间件中 process_response 时输出
 
 ```python
 bk_audit_client.export_events()
 ```
 
-需要注意的是，如果定义了 is_async=True 但没有调用 export_events 方法，可能会导致内存不断增长，直到达到队列长度   
+需要注意的是，如果定义了 is_delay=True 但没有调用 export_events 方法，可能会导致内存不断增长，直到达到队列长度   
 默认队列长度为10000，超出的内容会被清理，如果无法满足需求，可以手动设置队列的最大数量
 
 ```python
