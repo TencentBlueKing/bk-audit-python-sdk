@@ -45,6 +45,7 @@ class AuditEvent(object):
         user_identify_tenant_id=DEFAULT_EMPTY_VALUE,
         start_time=0,
         end_time=0,
+        bk_app_code=DEFAULT_EMPTY_VALUE,
         access_type=AccessTypeEnum.OTHER,
         access_source_ip=DEFAULT_EMPTY_VALUE,
         access_user_agent=DEFAULT_EMPTY_VALUE,
@@ -76,6 +77,8 @@ class AuditEvent(object):
         @param start_time: 事件开始事件
         @type end_time: int
         @param end_time: 事件结束时间
+        @type bk_app_code: str
+        @param bk_app_code: 事件上报模块
         @type access_type: int
         @param access_type: 访问方式
         @type access_source_ip: str
@@ -112,6 +115,7 @@ class AuditEvent(object):
         self.user_identify_tenant_id = user_identify_tenant_id
         self.start_time = int(start_time) or get_current_ms_ts()
         self.end_time = int(end_time) or get_current_ms_ts()
+        self.bk_app_code = bk_app_code
         self.access_type = int(access_type)
         self.access_source_ip = access_source_ip
         self.access_user_agent = access_user_agent
