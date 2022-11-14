@@ -51,7 +51,7 @@ class BkAudit(object):
         self._bk_app_code = bk_app_code
         self._bk_app_secret = bk_app_secret
         self._settings = settings or {}
-        self._log = BkAuditLog()
+        self._log = BkAuditLog(self._bk_app_code, self._bk_app_secret)
         self.service_name = bk_app_code
         self._init_settings()
 

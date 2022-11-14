@@ -23,7 +23,7 @@ from bk_audit.log.base import BkAuditLog
 from bk_audit.log.exporters import BaseExporter, LoggerExporter
 from bk_audit.log.formatters import BaseFormatter, Formatter
 from bk_audit.log.models import AuditContext, AuditEvent
-from tests.base.client import init_client
+from tests.base.client import app_code, app_secret, init_client
 from tests.base.constants import CONTEXT, HOST, HOST_INSTANCE, VIEW_FILE
 from tests.base.exporters import DelayExporter
 
@@ -78,7 +78,7 @@ class TestClient(TestCase):
 
     def test_set_log(self):
         """测试设置日志类"""
-        self.client.set_log(BkAuditLog())
+        self.client.set_log(BkAuditLog(app_code, app_secret))
 
     def test_bulk_add(self):
         """测试批量添加"""

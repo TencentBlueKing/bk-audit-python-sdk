@@ -28,12 +28,14 @@ class BkAuditLog(object):
     处理审计日志
     """
 
-    def __init__(self, queue=None):
+    def __init__(self, bk_app_code, bk_app_secret, queue=None):
         """
         @type queue: BaseQueue
         @param queue: 审计事件队列
         @rtype: BkAuditLog
         """
+        self._bk_app_code = bk_app_code
+        self._bk_app_secret = bk_app_secret
         self._queue = queue or AuditEventQueue()
         self._formatter = None
         self._sync_exporters = []
@@ -85,6 +87,7 @@ class BkAuditLog(object):
         """
         self._check_init()
         event = self._formatter.build_event(**kwargs)
+        event.bk_app_code = self._bk_app_code
         # 存在延迟导出的则需要将日志添加到队列
         if self._delay_exporters:
             self._queue.add(event)
