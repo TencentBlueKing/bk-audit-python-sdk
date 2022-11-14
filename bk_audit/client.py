@@ -41,11 +41,11 @@ class BkAudit(object):
     def __init__(self, bk_app_code, bk_app_secret, settings=None):
         """
         @type bk_app_code: str
-        @type bk_app_code: App Code
+        @param bk_app_code: App Code
         @type bk_app_secret: str
-        @type bk_app_secret: App Secret
+        @param bk_app_secret: App Secret
         @type settings: dict
-        @type settings: 设置
+        @param settings: 设置
         @rtype: BkAudit
         """
         self._bk_app_code = bk_app_code

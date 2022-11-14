@@ -30,6 +30,10 @@ class BkAuditLog(object):
 
     def __init__(self, bk_app_code, bk_app_secret, queue=None):
         """
+        @type bk_app_code: str
+        @param bk_app_code: App Code
+        @type bk_app_secret: str
+        @param bk_app_secret: App Secret
         @type queue: BaseQueue
         @param queue: 审计事件队列
         @rtype: BkAuditLog
