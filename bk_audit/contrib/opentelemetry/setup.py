@@ -20,15 +20,16 @@ import logging
 import os
 
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
-from opentelemetry.sdk._logs import (
-    LogEmitterProvider,
-    LoggingHandler,
-    set_log_emitter_provider,
-)
+from opentelemetry.sdk._logs import LogEmitterProvider, set_log_emitter_provider
 from opentelemetry.sdk._logs.export import BatchLogProcessor
 from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.version import __version__ as _ot_version
+from packaging import version
 
+from bk_audit.constants.contrib import OTVersion
 from bk_audit.constants.utils import OT_LOGGER_NAME
+
+OT_VERSION = version.parse(_ot_version)
 
 
 def setup(client):
@@ -37,6 +38,12 @@ def setup(client):
     @type client: bk_audit.client.BkAudit
     @param client: 审计Client
     """
+
+    if OT_VERSION < OTVersion.v1_11_0:
+        from opentelemetry.sdk._logs import OTLPHandler as LoggingHandler
+    else:
+        from opentelemetry.sdk._logs import LoggingHandler
+
     service_name = client.service_name
     bk_data_id = int(os.getenv("BKAPP_OTEL_LOG_BK_DATA_ID", -1))
     bk_data_token = os.getenv("BKAPP_OTEL_LOG_BK_DATA_TOKEN", "")

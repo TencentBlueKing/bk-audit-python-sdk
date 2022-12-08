@@ -20,7 +20,7 @@ from setuptools import setup
 
 setup(
     name="bk-audit",
-    version="1.0.1-rc.0",
+    version="1.0.2-rc.0",
     author="blueking",
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
@@ -36,14 +36,15 @@ setup(
     ],
     requires=[
         "bk_iam",
+        "packaging",
     ],
     extras_require={
         # OT 仅支持 Py3.6 及以上版本
         "opentelemetry": [
             "protobuf>=3.19.5",
-            "opentelemetry-api>=1.11.1",
-            "opentelemetry-sdk>=1.11.1",
-            "opentelemetry-exporter-otlp>=1.11.1",
+            "opentelemetry-api>=1.7.1,<1.13.0",
+            "opentelemetry-sdk>=1.7.1,<1.13.0",
+            "opentelemetry-exporter-otlp>=1.7.1,<1.13.0",
         ]
     },
     classifiers=[
