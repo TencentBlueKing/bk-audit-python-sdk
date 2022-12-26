@@ -16,11 +16,17 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
+import os
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.sdk._logs import LogData, LogRecord
+from opentelemetry.sdk.util.instrumentation import InstrumentationScope
+
 from bk_audit.constants.contrib import OTVersion
 from bk_audit.contrib.opentelemetry.exporters import OTLogExporter
+from bk_audit.contrib.opentelemetry.processor import LazyBatchLogProcessor
 from bk_audit.contrib.opentelemetry.setup import setup
 from bk_audit.contrib.opentelemetry.utils import (
     BaseServiceNameHandler,
@@ -39,6 +45,7 @@ class TestOT(TestCase):
 
     def test_ot_export(self):
         """测试OT导出"""
+        setup(self.client)
         self.client.add_event(action=VIEW_FILE, audit_context=CONTEXT)
 
     def test_json_decode_error(self):
@@ -69,3 +76,16 @@ class TestOT(TestCase):
     def test_service_name_worker(self):
         """测试服务名处理Worker"""
         self.assertEqual(ServiceNameHandler(SERVICE_NAME).get_service_name(), "%s_celery_worker" % SERVICE_NAME)
+
+    def test_processor_shutdown(self):
+        """测试停止进程"""
+        exporter = OTLPLogExporter(endpoint=os.getenv("BKAPP_OTEL_LOG_ENDPOINT"))
+        # shutdown normally
+        processor = LazyBatchLogProcessor(exporter)
+        processor.force_flush()
+        processor.shutdown()
+        # shutdown with work thread
+        processor = LazyBatchLogProcessor(exporter)
+        processor.emit(LogData(LogRecord(), InstrumentationScope(self.client._bk_app_code)))
+        processor.force_flush()
+        processor.shutdown()
