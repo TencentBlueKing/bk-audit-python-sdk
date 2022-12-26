@@ -32,11 +32,13 @@ class OTLogExporter(BaseExporter):
 
     def _trans_json(self, data):
         for key, val in data.items():
-            if isinstance(val, dict) or isinstance(val, list):
+            if isinstance(val, (dict, list)):
                 try:
                     data[key] = json.dumps(val)
                 except Exception:  # pylint: disable=broad-except
                     data[key] = str(val)
+            elif isinstance(val, int):
+                data[key] = val
             else:
                 data[key] = str(val)
         return data

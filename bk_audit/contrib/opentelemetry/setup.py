@@ -21,13 +21,13 @@ import os
 
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 from opentelemetry.sdk._logs import LogEmitterProvider, set_log_emitter_provider
-from opentelemetry.sdk._logs.export import BatchLogProcessor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.version import __version__ as _ot_version
 from packaging import version
 
 from bk_audit.constants.contrib import OTVersion
 from bk_audit.constants.utils import OT_LOGGER_NAME
+from bk_audit.contrib.opentelemetry.processor import LazyBatchLogProcessor
 
 OT_VERSION = version.parse(_ot_version)
 
@@ -54,7 +54,7 @@ def setup(client):
     )
     set_log_emitter_provider(log_emitter_provider)
     exporter = OTLPLogExporter(endpoint=os.getenv("BKAPP_OTEL_LOG_ENDPOINT"))
-    log_emitter_provider.add_log_processor(BatchLogProcessor(exporter))
+    log_emitter_provider.add_log_processor(LazyBatchLogProcessor(exporter))
     handler = LoggingHandler(
         level=logging.NOTSET,
         log_emitter=log_emitter_provider.get_log_emitter(service_name),
