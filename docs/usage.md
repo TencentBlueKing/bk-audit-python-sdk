@@ -128,6 +128,14 @@ instance = HostInstance(data)
 bk_audit_client.add_event(action=VIEW_FILE, resource_type=HOST, audit_context=context, instance=instance)
 ```
 
+需要注意的是，如果是输出到文件，需要确保文件每一行为一条审计事件，不能在外层再包裹其他内容，对于 Django 的 LOGGING 可以使用 `LoggingConfigHandler` 处理
+
+```python
+from bk_audit.contrib.django.loggers import LoggingConfigHandler
+
+LOGGING = LoggingConfigHandler(filename="xxxx.log", log_level="INFO").set_logging(LOGGING)
+```
+
 ## 使用进阶
 
 ### 自定义 Formatter

@@ -19,6 +19,14 @@ to the current version of the project delivered to anyone in the future.
 from packaging import version
 
 
+class LoggingDefaultConfig:
+    """Logging 默认配置"""
+
+    HANDLER_CLS = "logging.handlers.RotatingFileHandler"
+    FILE_MAX_BYTES = 1024 * 1024 * 100  # 10M
+    FILE_BACKUP_COUNT = 5
+
+
 class OTVersion:
     """OT 更新版本"""
 
