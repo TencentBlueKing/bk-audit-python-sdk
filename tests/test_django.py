@@ -16,9 +16,13 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
+import logging
 from unittest import TestCase
 
+from bk_audit.constants.contrib import LoggingDefaultConfig
+from bk_audit.constants.utils import LOGGER_NAME
 from bk_audit.contrib.django.formatters import DjangoFormatter
+from bk_audit.contrib.django.loggers import LoggingConfigHandler
 from bk_audit.log.models import AuditContext
 from tests.base.client import init_client
 from tests.base.constants import REQUEST_IP, VIEW_FILE
@@ -55,3 +59,24 @@ class TestDjango(TestCase):
         # HTTP_X_FORWARDED_FOR
         request.META = {"HTTP_X_FORWARDED_FOR": REQUEST_IP}
         self.client.add_event(action=VIEW_FILE, audit_context=AuditContext(request=request))
+
+    def test_logging(self):
+        """测试LOGGING"""
+        file_name = "test.log"
+        logging_config = LoggingConfigHandler(file_name).set_logging({"handlers": {}, "formatters": {}, "loggers": {}})
+        self.assertEqual(
+            logging_config,
+            {
+                "handlers": {
+                    "bk_audit": {
+                        "class": LoggingDefaultConfig.HANDLER_CLS,
+                        "formatter": LOGGER_NAME,
+                        "filename": file_name,
+                        "maxBytes": LoggingDefaultConfig.FILE_MAX_BYTES,
+                        "backupCount": LoggingDefaultConfig.FILE_BACKUP_COUNT,
+                    }
+                },
+                "formatters": {LOGGER_NAME: {"format": "%(message)s"}},
+                "loggers": {LOGGER_NAME: {"handlers": [LOGGER_NAME], "level": logging.INFO, "propagate": True}},
+            },
+        )
