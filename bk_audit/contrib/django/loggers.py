@@ -29,11 +29,11 @@ class LoggingConfigHandler(object):
 
     def __init__(
         self,
-        filename: str,
-        log_level: str = logging.INFO,
-        handler_cls: str = LoggingDefaultConfig.HANDLER_CLS,
-        file_max_bytes: int = LoggingDefaultConfig.FILE_MAX_BYTES,
-        file_backup_count: int = LoggingDefaultConfig.FILE_BACKUP_COUNT,
+        filename,
+        log_level = logging.INFO,
+        handler_cls = LoggingDefaultConfig.HANDLER_CLS,
+        file_max_bytes = LoggingDefaultConfig.FILE_MAX_BYTES,
+        file_backup_count = LoggingDefaultConfig.FILE_BACKUP_COUNT,
     ):
         self.filename = filename
         self.log_level = log_level
@@ -71,7 +71,7 @@ class LoggingConfigHandler(object):
     def logger_config(self):
         return {"handlers": [self.handler_name], "level": self.log_level, "propagate": True}
 
-    def set_logging(self, logging_config: dict) -> dict:
+    def set_logging(self, logging_config):
         logging_config["formatters"][self.formatter_name] = self.formatter_config
         logging_config["handlers"][self.handler_name] = self.handler_config
         logging_config["loggers"][self.logger_name] = self.logger_config
