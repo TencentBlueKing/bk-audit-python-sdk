@@ -20,7 +20,7 @@ from setuptools import setup
 
 setup(
     name="bk-audit",
-    version="1.0.3-rc.0",
+    version="1.0.3-rc.1",
     author="blueking",
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
