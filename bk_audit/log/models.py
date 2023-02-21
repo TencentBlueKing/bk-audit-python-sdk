@@ -129,7 +129,7 @@ class AuditEvent(object):
         self.result_code = int(result_code)
         self.result_content = result_content
         self.extend_data = extend_data or {}
-        self.audit_event_signature = AUDIT_EVENT_SIGNATURE
+        self.bk_log_scope = AUDIT_EVENT_SIGNATURE
 
     def __str__(self):
         """
