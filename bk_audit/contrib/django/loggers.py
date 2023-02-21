@@ -29,11 +29,11 @@ class LoggingConfigHandler(object):
 
     def __init__(
         self,
-        filename: str,
-        log_level: str = logging.INFO,
-        handler_cls: str = LoggingDefaultConfig.HANDLER_CLS,
-        file_max_bytes: int = LoggingDefaultConfig.FILE_MAX_BYTES,
-        file_backup_count: int = LoggingDefaultConfig.FILE_BACKUP_COUNT,
+        filename,
+        log_level = logging.INFO,
+        handler_cls = LoggingDefaultConfig.HANDLER_CLS,
+        file_max_bytes = LoggingDefaultConfig.FILE_MAX_BYTES,
+        file_backup_count = LoggingDefaultConfig.FILE_BACKUP_COUNT,
     ):
         self.filename = filename
         self.log_level = log_level
