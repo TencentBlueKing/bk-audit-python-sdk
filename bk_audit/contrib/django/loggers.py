@@ -18,6 +18,7 @@ to the current version of the project delivered to anyone in the future.
 
 import logging
 
+from bk_audit.constants.contrib import LoggingDefaultConfig
 from bk_audit.constants.utils import LOGGER_NAME
 
 
@@ -26,9 +27,19 @@ class LoggingConfigHandler(object):
     处理Logging配置
     """
 
-    def __init__(self, filename: str, log_level: str = logging.INFO):
+    def __init__(
+        self,
+        filename: str,
+        log_level: str = logging.INFO,
+        handler_cls: str = LoggingDefaultConfig.HANDLER_CLS,
+        file_max_bytes: int = LoggingDefaultConfig.FILE_MAX_BYTES,
+        file_backup_count: int = LoggingDefaultConfig.FILE_BACKUP_COUNT,
+    ):
         self.filename = filename
         self.log_level = log_level
+        self.handler_cls = handler_cls
+        self.file_max_bytes = file_max_bytes
+        self.file_backup_count = file_backup_count
 
     @property
     def handler_name(self):
@@ -37,11 +48,11 @@ class LoggingConfigHandler(object):
     @property
     def handler_config(self):
         return {
-            "class": "logging.handlers.RotatingFileHandler",
+            "class": self.handler_cls,
             "formatter": self.formatter_name,
             "filename": self.filename,
-            "maxBytes": 1024 * 1024 * 100,
-            "backupCount": 5,
+            "maxBytes": self.file_max_bytes,
+            "backupCount": self.file_backup_count,
         }
 
     @property
