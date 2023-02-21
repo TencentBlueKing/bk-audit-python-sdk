@@ -71,7 +71,7 @@ class LoggingConfigHandler(object):
     def logger_config(self):
         return {"handlers": [self.handler_name], "level": self.log_level, "propagate": True}
 
-    def set_logging(self, logging_config: dict) -> dict:
+    def set_logging(self, logging_config):
         logging_config["formatters"][self.formatter_name] = self.formatter_config
         logging_config["handlers"][self.handler_name] = self.handler_config
         logging_config["loggers"][self.logger_name] = self.logger_config
