@@ -97,7 +97,7 @@ class DjangoFormatter(Formatter):
 
     @ignore_wrapper(default_return=DEFAULT_EMPTY_VALUE)
     def get_request_id(self, request):
-        return getattr(request, "request_id", uuid.uuid4().hex)
+        return getattr(request, "request_id", uuid.uuid1().hex)
 
     @ignore_wrapper(default_return=DEFAULT_EMPTY_VALUE)
     def get_request_username(self, request):

@@ -107,7 +107,7 @@ class AuditEvent(object):
         @param extend_data: 拓展信息
         @rtype: AuditEvent
         """
-        self.event_id = event_id or uuid.uuid4().hex
+        self.event_id = event_id or uuid.uuid1().hex
         self.event_content = event_content
         self.request_id = request_id
         self.username = username
