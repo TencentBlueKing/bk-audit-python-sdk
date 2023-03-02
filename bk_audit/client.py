@@ -156,7 +156,7 @@ class BkAudit(object):
             action=action,
             resource_type=resource_type,
             instance=instance,
-            event_id=event_id or uuid.uuid4().hex,
+            event_id=event_id or uuid.uuid1().hex,
             event_content=event_content,
             start_time=start_time or get_current_ms_ts(),
             end_time=end_time or get_current_ms_ts(),

@@ -95,7 +95,7 @@ class TestClient(TestCase):
             resource_type=HOST,
             audit_context=AuditContext(),
             instance=HOST_INSTANCE,
-            event_id=uuid.uuid4().hex,
+            event_id=uuid.uuid1().hex,
             event_content=str(),
             start_time=int(),
             end_time=int(),
@@ -112,5 +112,5 @@ class TestClient(TestCase):
 
     def test_model_str(self):
         """测试ModelStr"""
-        event_id = uuid.uuid4().hex
+        event_id = uuid.uuid1().hex
         self.assertEqual(str(AuditEvent(event_id=event_id)), event_id)
