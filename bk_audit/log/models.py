@@ -43,6 +43,8 @@ class AuditEvent(object):
         username=DEFAULT_EMPTY_VALUE,
         user_identify_type=UserIdentifyTypeEnum.UNKNOWN,
         user_identify_tenant_id=DEFAULT_EMPTY_VALUE,
+        user_identify_src=DEFAULT_EMPTY_VALUE,
+        user_identify_src_username=DEFAULT_EMPTY_VALUE,
         start_time=0,
         end_time=0,
         bk_app_code=DEFAULT_EMPTY_VALUE,
@@ -73,6 +75,10 @@ class AuditEvent(object):
         @param user_identify_type: 操作人账号类型
         @type user_identify_tenant_id: str
         @param user_identify_tenant_id: 操作人租户ID
+        @type user_identify_src: str
+        @param user_identify_src: 操作人账号来源
+        @type user_identify_src_username: str
+        @param user_identify_src_username: 操作人账号
         @type start_time: int
         @param start_time: 事件开始事件
         @type end_time: int
@@ -113,6 +119,8 @@ class AuditEvent(object):
         self.username = username
         self.user_identify_type = int(user_identify_type)
         self.user_identify_tenant_id = user_identify_tenant_id
+        self.user_identify_src = user_identify_src
+        self.user_identify_src_username = user_identify_src_username
         self.start_time = int(start_time) or get_current_ms_ts()
         self.end_time = int(end_time) or get_current_ms_ts()
         self.bk_app_code = bk_app_code
@@ -277,6 +285,8 @@ class AuditContext(object):
         access_user_agent=DEFAULT_EMPTY_VALUE,
         user_identify_type=UserIdentifyTypeEnum.UNKNOWN,
         user_identify_tenant_id=DEFAULT_EMPTY_VALUE,
+        user_identify_src=DEFAULT_EMPTY_VALUE,
+        user_identify_src_username=DEFAULT_EMPTY_VALUE,
         **kwargs
     ):
         """
@@ -294,6 +304,10 @@ class AuditContext(object):
         @param user_identify_type: 操作人账号类型
         @type user_identify_tenant_id: str
         @param user_identify_tenant_id: 操作人租户ID
+        @type user_identify_src: str
+        @param user_identify_src: 操作人账号来源
+        @type user_identify_src_username: str
+        @param user_identify_src_username: 操作人账号
         @rtype: AuditContext
         """
         self.username = username
@@ -303,5 +317,7 @@ class AuditContext(object):
         self.access_user_agent = access_user_agent
         self.user_identify_type = user_identify_type
         self.user_identify_tenant_id = user_identify_tenant_id
+        self.user_identify_src = user_identify_src
+        self.user_identify_src_username = user_identify_src_username
         for key, val in kwargs.items():
             setattr(self, key, val)

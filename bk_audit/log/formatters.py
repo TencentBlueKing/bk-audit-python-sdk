@@ -122,6 +122,8 @@ class Formatter(BaseFormatter):
             username=audit_context.username,
             user_identify_type=audit_context.user_identify_type,
             user_identify_tenant_id=audit_context.user_identify_tenant_id,
+            user_identify_src=audit_context.user_identify_src,
+            user_identify_src_username=audit_context.user_identify_src_username,
             start_time=start_time,
             end_time=end_time,
             access_type=audit_context.access_type,
