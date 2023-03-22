@@ -22,7 +22,7 @@ from tests.base.models import Action, ResourceType
 VIEW_FILE = Action("view_file")
 HOST = ResourceType("host")
 
-CONTEXT = AuditContext(username="admin")
+CONTEXT = AuditContext(username="admin", user_identify_src=None)
 
 HOST_INSTANCE = AuditInstance(object())
 
