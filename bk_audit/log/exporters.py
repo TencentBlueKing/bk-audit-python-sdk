@@ -54,13 +54,16 @@ class LoggerExporter(BaseExporter):
 
     is_delay = False
 
+    def __init__(self):
+        self.logger = logging.getLogger(LOGGER_NAME)
+        self.logger.setLevel(logging.INFO)
+        self.logger.propagate = False
+
     def export(self, events):
         """
         直接输出到日志
         @type events: typing.List[bk_audit.log.models.AuditEvent]
         @param events: 审计事件列表
         """
-        logger = logging.getLogger(LOGGER_NAME)
-        logger.setLevel(logging.INFO)
         for event in events:
-            logger.info(event.to_json_str())
+            self.logger.info(event.to_json_str())
