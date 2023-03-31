@@ -1,5 +1,9 @@
 # 版本日志
 
+## v1.0.7
+
+- Django 集成不再默认提供 RequestID
+
 ## v1.0.6
 
 - 禁用 Logger 的 propagate 配置，只使用当前指定的方式输出日志

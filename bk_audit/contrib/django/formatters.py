@@ -16,8 +16,6 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-import uuid
-
 from bk_audit.constants.log import (
     DEFAULT_EMPTY_VALUE,
     AccessTypeEnum,
@@ -97,7 +95,7 @@ class DjangoFormatter(Formatter):
 
     @ignore_wrapper(default_return=DEFAULT_EMPTY_VALUE)
     def get_request_id(self, request):
-        return getattr(request, "request_id", uuid.uuid1().hex)
+        return getattr(request, "request_id", "")
 
     @ignore_wrapper(default_return=DEFAULT_EMPTY_VALUE)
     def get_request_username(self, request):
