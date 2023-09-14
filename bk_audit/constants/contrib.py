@@ -18,6 +18,8 @@ to the current version of the project delivered to anyone in the future.
 
 from packaging import version
 
+DJANGO_SETTING_NAME = "BK_AUDIT_SETTINGS"
+
 
 class LoggingDefaultConfig:
     """Logging 默认配置"""

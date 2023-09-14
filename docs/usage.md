@@ -259,3 +259,26 @@ bk_audit_client = BkAudit(bk_app_code="APP_CODE", bk_app_secret="SECRET_KEY", se
 ```shell
 BKAPP_USE_SIMPLE_LOG_PROCESSOR=1
 ```
+
+### Django 自动集成
+
+在 Django 项目下，可在 INSTALLED_APPS 中增加 `bk_audit.contrib.bk_audit`，会通过 Django Settings 初始化对应的 bk_audit_client，在项目中可以直接使用
+
+```python
+# settings.py
+# 所有配置均为可选配置
+BK_AUDIT_SETTINGS = {
+    "log_queue_limit": 50000,
+    "formatter": "apps.audit.formatters.AuditFormatter",
+    "exporters": ["bk_audit.contrib.opentelemetry.exporters.OTLogExporter"],
+    "service_name_handler": "bk_audit.contrib.opentelemetry.utils.ServiceNameHandler",
+    "ot_endpoint": "http://127.0.0.1:4317",
+    "bk_data_token": "",
+}
+```
+
+```python
+from bk_audit.contrib.bk_audit.client import bk_audit_client
+
+bk_audit_client.add_event(xxx)
+```

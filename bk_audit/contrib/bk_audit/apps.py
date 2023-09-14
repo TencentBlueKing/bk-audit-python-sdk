@@ -16,18 +16,28 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-from bk_audit.log.models import AuditContext, AuditInstance
-from tests.base.models import Action, ResourceType
+import os
 
-VIEW_FILE = Action("view_file")
-HOST = ResourceType("host")
+from django.apps import AppConfig
+from django.utils.translation import gettext_lazy
 
-CONTEXT = AuditContext(username="admin", user_identify_src=None)
+from bk_audit.contrib.bk_audit.settings import bk_audit_settings
 
-HOST_INSTANCE = AuditInstance(object())
 
-REQUEST_IP = "127.0.0.1"
+class AuditConfig(AppConfig):
+    name = "bk_audit.contrib.bk_audit"
+    verbose_name = gettext_lazy("BK Audit")
 
-SERVICE_NAME = "bk_audit"
+    def ready(self):
+        if not bk_audit_settings.ot_endpoint and not os.getenv("BKAPP_OTEL_LOG_ENDPOINT"):
+            return
 
-APP_CODE = "bk-audit"
+        from bk_audit.contrib.bk_audit.client import bk_audit_client
+        from bk_audit.contrib.opentelemetry.setup import setup
+
+        setup(
+            bk_audit_client,
+            bk_data_id=bk_audit_settings.bk_data_id,
+            bk_data_token=bk_audit_settings.bk_data_token,
+            endpoint=bk_audit_settings.ot_endpoint,
+        )

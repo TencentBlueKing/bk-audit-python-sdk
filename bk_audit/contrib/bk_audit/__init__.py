@@ -15,19 +15,3 @@ specific language governing permissions and limitations under the License.
 We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
-
-from bk_audit.log.models import AuditContext, AuditInstance
-from tests.base.models import Action, ResourceType
-
-VIEW_FILE = Action("view_file")
-HOST = ResourceType("host")
-
-CONTEXT = AuditContext(username="admin", user_identify_src=None)
-
-HOST_INSTANCE = AuditInstance(object())
-
-REQUEST_IP = "127.0.0.1"
-
-SERVICE_NAME = "bk_audit"
-
-APP_CODE = "bk-audit"

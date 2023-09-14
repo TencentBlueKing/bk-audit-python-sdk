@@ -16,18 +16,16 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-from bk_audit.log.models import AuditContext, AuditInstance
-from tests.base.models import Action, ResourceType
+from bk_audit.client import BkAudit
+from bk_audit.contrib.bk_audit.settings import bk_audit_settings
 
-VIEW_FILE = Action("view_file")
-HOST = ResourceType("host")
-
-CONTEXT = AuditContext(username="admin", user_identify_src=None)
-
-HOST_INSTANCE = AuditInstance(object())
-
-REQUEST_IP = "127.0.0.1"
-
-SERVICE_NAME = "bk_audit"
-
-APP_CODE = "bk-audit"
+bk_audit_client = BkAudit(
+    bk_app_code=bk_audit_settings.get_app_code(),
+    bk_app_secret=bk_audit_settings.get_app_secret(),
+    settings={
+        "log_queue_limit": bk_audit_settings.log_queue_limit,
+        "formatter": bk_audit_settings.formatter,
+        "exporters": bk_audit_settings.exporters,
+        "service_name_handler": bk_audit_settings.service_name_handler,
+    },
+)
