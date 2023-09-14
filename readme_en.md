@@ -1,11 +1,10 @@
 ![logo.png](assests/logo.png)
 
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/LICENSE.txt)
-[![Release Version](https://img.shields.io/badge/release-1.0.7-brightgreen.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/releases)
+[![Release Version](https://img.shields.io/badge/release-1.0.8-brightgreen.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/releases)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/pulls)
 [![codecov](https://codecov.io/github/TencentBlueKing/bk-audit-python-sdk/branch/master/graph/badge.svg?token=CUG20ZMOVQ)](https://codecov.io/github/TencentBlueKing/bk-audit-python-sdk)
 [![Test](https://github.com/TencentBlueKing/bk-audit-python-sdk/actions/workflows/unittest_py3.yml/badge.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/actions/workflows/unittest_py3.yml)
-[![Test](https://github.com/TencentBlueKing/bk-audit-python-sdk/actions/workflows/unittest_py2.yml/badge.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/actions/workflows/unittest_py2.yml)
 
 ## Overview
 

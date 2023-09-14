@@ -18,9 +18,15 @@ to the current version of the project delivered to anyone in the future.
 
 import logging
 import os
+from typing import Type
 
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
-from opentelemetry.sdk._logs import LogEmitterProvider, set_log_emitter_provider
+from opentelemetry.sdk._logs import (
+    LogEmitterProvider,
+    LogProcessor,
+    set_log_emitter_provider,
+)
+from opentelemetry.sdk._logs.export import SimpleLogProcessor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.version import __version__ as _ot_version
 from packaging import version
@@ -44,17 +50,27 @@ def setup(client):
     else:
         from opentelemetry.sdk._logs import LoggingHandler
 
+    # init service config
     service_name = client.service_name
     bk_data_id = int(os.getenv("BKAPP_OTEL_LOG_BK_DATA_ID", -1))
     bk_data_token = os.getenv("BKAPP_OTEL_LOG_BK_DATA_TOKEN", "")
+
+    # init log emitter
     log_emitter_provider = LogEmitterProvider(
         resource=Resource.create(
             {"service.name": service_name, "bk_data_id": bk_data_id, "bk.data.token": bk_data_token}
         )
     )
     set_log_emitter_provider(log_emitter_provider)
+
+    # init exporter
+    processor: Type[LogProcessor] = LazyBatchLogProcessor
+    if os.getenv("BKAPP_USE_SIMPLE_LOG_PROCESSOR"):
+        processor = SimpleLogProcessor
     exporter = OTLPLogExporter(endpoint=os.getenv("BKAPP_OTEL_LOG_ENDPOINT"))
-    log_emitter_provider.add_log_processor(LazyBatchLogProcessor(exporter))
+    log_emitter_provider.add_log_processor(processor(exporter))
+
+    # init logging
     handler = LoggingHandler(
         level=logging.NOTSET,
         log_emitter=log_emitter_provider.get_log_emitter(service_name),

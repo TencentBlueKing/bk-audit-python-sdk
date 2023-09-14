@@ -16,6 +16,7 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
+import os
 import uuid
 from unittest import TestCase
 
@@ -114,3 +115,9 @@ class TestClient(TestCase):
         """测试ModelStr"""
         event_id = uuid.uuid1().hex
         self.assertEqual(str(AuditEvent(event_id=event_id)), event_id)
+
+    def test_setup_simple(self):
+        """测试生成同步上报"""
+        os.environ["BKAPP_USE_SIMPLE_LOG_PROCESSOR"] = "True"
+        client = init_client()
+        client.add_event(action=VIEW_FILE, audit_context=CONTEXT)
