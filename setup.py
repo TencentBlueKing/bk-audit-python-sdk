@@ -27,7 +27,7 @@ with open(readme_path) as f:
 
 setup(
     name="bk-audit",
-    version="1.1.0",
+    version="1.1.0rc0",
     author="blueking",
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
@@ -38,6 +38,7 @@ setup(
         "bk_audit",
         "bk_audit.constants",
         "bk_audit.contrib",
+        "bk_audit.contrib.bk_audit",
         "bk_audit.contrib.django",
         "bk_audit.contrib.opentelemetry",
         "bk_audit.log",
