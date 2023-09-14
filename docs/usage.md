@@ -251,3 +251,11 @@ bk_audit_client.set_queue_limit(10000)
 # 方式二
 bk_audit_client = BkAudit(bk_app_code="APP_CODE", bk_app_secret="SECRET_KEY", settings={"log_queue_limit": 10000})
 ```
+
+### 同步上报
+
+默认的日志上报处理使用多线程的方式，对主线程无感知，若主线程提前退出可能导致日志丢失，若需要使用同步的方式上报，即等待日志上报成功再退出主线程，请添加如下环境变量
+
+```shell
+BKAPP_USE_SIMPLE_LOG_PROCESSOR=1
+```
