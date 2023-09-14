@@ -99,6 +99,9 @@ class TestDjango(TestCase):
         app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
         app_config.ready()
 
+        # 清理 Logger 避免影响其他的单元测试
+        logging.getLogger(OT_LOGGER_NAME).handlers = []
+
     @override_settings()
     def test_auto_instrument_ot(self):
         """测试OT注入"""
