@@ -29,3 +29,5 @@ HOST_INSTANCE = AuditInstance(object())
 REQUEST_IP = "127.0.0.1"
 
 SERVICE_NAME = "bk_audit"
+
+APP_CODE = "bk-audit"

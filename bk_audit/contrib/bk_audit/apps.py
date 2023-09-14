@@ -21,7 +21,7 @@ import os
 from django.apps import AppConfig
 from django.utils.translation import gettext_lazy
 
-from bk_audit.contrib.bk_audit.client import bk_audit_client
+from bk_audit.contrib.bk_audit.settings import bk_audit_settings
 
 
 class AuditConfig(AppConfig):
@@ -29,10 +29,10 @@ class AuditConfig(AppConfig):
     verbose_name = gettext_lazy("BK Audit")
 
     def ready(self):
-        if not os.getenv("BKAPP_OTEL_LOG_ENDPOINT"):
+        if not bk_audit_settings.ot_endpoint and not os.getenv("BKAPP_OTEL_LOG_ENDPOINT"):
             return
 
-        from bk_audit.contrib.bk_audit.settings import bk_audit_settings
+        from bk_audit.contrib.bk_audit.client import bk_audit_client
         from bk_audit.contrib.opentelemetry.setup import setup
 
         setup(

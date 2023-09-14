@@ -16,13 +16,16 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-from dataclasses import asdict
-
 from bk_audit.client import BkAudit
 from bk_audit.contrib.bk_audit.settings import bk_audit_settings
 
 bk_audit_client = BkAudit(
     bk_app_code=bk_audit_settings.get_app_code(),
     bk_app_secret=bk_audit_settings.get_app_secret(),
-    settings=asdict(bk_audit_settings),
+    settings={
+        "log_queue_limit": bk_audit_settings.log_queue_limit,
+        "formatter": bk_audit_settings.formatter,
+        "exporters": bk_audit_settings.exporters,
+        "service_name_handler": bk_audit_settings.service_name_handler,
+    },
 )

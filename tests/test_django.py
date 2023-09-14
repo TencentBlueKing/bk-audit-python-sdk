@@ -17,7 +17,12 @@ to the current version of the project delivered to anyone in the future.
 """
 
 import logging
+import uuid
 from unittest import TestCase
+
+from django.conf import settings
+from django.core.mail.backends.locmem import EmailBackend
+from django.test import override_settings
 
 from bk_audit.constants.contrib import LoggingDefaultConfig
 from bk_audit.constants.utils import LOGGER_NAME
@@ -25,7 +30,7 @@ from bk_audit.contrib.django.formatters import DjangoFormatter
 from bk_audit.contrib.django.loggers import LoggingConfigHandler
 from bk_audit.log.models import AuditContext
 from tests.base.client import init_client
-from tests.base.constants import REQUEST_IP, VIEW_FILE
+from tests.base.constants import APP_CODE, REQUEST_IP, VIEW_FILE
 from tests.base.models import Request
 
 
@@ -36,6 +41,7 @@ class TestDjango(TestCase):
         """初始化 Client"""
         self.client = init_client()
         self.client.set_formatter(DjangoFormatter())
+        EmailBackend()
 
     def test_add_event(self):
         """测试添加事件"""
@@ -80,3 +86,28 @@ class TestDjango(TestCase):
                 "loggers": {LOGGER_NAME: {"handlers": [LOGGER_NAME], "level": logging.INFO, "propagate": True}},
             },
         )
+
+    def test_auto_instrument(self):
+        """测试自动注入"""
+
+        settings.configure(
+            APP_CODE=APP_CODE, SECRET_KEY=uuid.uuid1().hex, BK_AUDIT_SETTINGS={"ot_endpoint": "http://127.0.0.1"}
+        )
+
+        from bk_audit.contrib.bk_audit.apps import AuditConfig
+
+        app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
+        app_config.ready()
+
+    @override_settings(BK_AUDIT_SETTINGS={})
+    def test_auto_instrument_ot(self):
+        """测试OT注入"""
+
+        from bk_audit.contrib.bk_audit.settings import bk_audit_settings
+
+        bk_audit_settings.ot_endpoint = ""
+
+        from bk_audit.contrib.bk_audit.apps import AuditConfig
+
+        app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
+        app_config.ready()
