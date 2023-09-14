@@ -1,4 +1,4 @@
-![logo.png](assests/logo.png)
+![logo.png](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/assests/logo.png)
 
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/LICENSE.txt)
 [![Release Version](https://img.shields.io/badge/release-1.0.8-brightgreen.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/releases)
