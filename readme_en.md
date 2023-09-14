@@ -28,11 +28,11 @@ $ pip install bk-audit
 
 ### Usage
 
-- [Usage Doc](docs/usage.md)
+- [Usage Doc](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/docs/usage.md)
 
 ## Roadmap
 
-- [Release Log](release.md)
+- [Release Log](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/release.md)
 
 ## Support
 
@@ -57,4 +57,4 @@ If you have good ideas or suggestions, please let us know by Issues or Pull Requ
 
 ## License
 
-Based on the MIT protocol. Please refer to [LICENSE](LICENSE.txt)
+Based on the MIT protocol. Please refer to [LICENSE](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/License.txt)

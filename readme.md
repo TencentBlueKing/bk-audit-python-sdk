@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/github/TencentBlueKing/bk-audit-python-sdk/branch/master/graph/badge.svg?token=CUG20ZMOVQ)](https://codecov.io/github/TencentBlueKing/bk-audit-python-sdk)
 [![Test](https://github.com/TencentBlueKing/bk-audit-python-sdk/actions/workflows/unittest_py3.yml/badge.svg)](https://github.com/TencentBlueKing/bk-audit-python-sdk/actions/workflows/unittest_py3.yml)
 
-[(English Documents Available)](readme_en.md)
+[(English Documents Available)](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/readme_en.md)
 
 ## Overview
 
@@ -30,11 +30,11 @@ $ pip install bk-audit
 
 ### Usage
 
-- [使用文档](docs/usage.md)
+- [使用文档](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/docs/usage.md)
 
 ## Roadmap
 
-- [版本日志](release.md)
+- [版本日志](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/release.md)
 
 ## Support
 
@@ -58,4 +58,4 @@ $ pip install bk-audit
 
 ## License
 
-基于 MIT 协议， 详细请参考 [LICENSE](LICENSE.txt)
+基于 MIT 协议， 详细请参考 [LICENSE](https://github.com/TencentBlueKing/bk-audit-python-sdk/blob/master/License.txt)
