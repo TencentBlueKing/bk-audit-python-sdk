@@ -16,9 +16,13 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
+import os
+
 from setuptools import setup
 
-with open("readme.md") as f:
+current_directory = os.path.abspath(os.path.dirname(__file__))
+readme_path = os.path.join(current_directory, "readme.md")
+with open(readme_path) as f:
     readme = f.read()
 
 setup(
