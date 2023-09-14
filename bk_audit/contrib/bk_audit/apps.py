@@ -32,6 +32,12 @@ class AuditConfig(AppConfig):
         if not os.getenv("BKAPP_OTEL_LOG_ENDPOINT"):
             return
 
+        from bk_audit.contrib.bk_audit.settings import bk_audit_settings
         from bk_audit.contrib.opentelemetry.setup import setup
 
-        setup(bk_audit_client)
+        setup(
+            bk_audit_client,
+            bk_data_id=bk_audit_settings.bk_data_id,
+            bk_data_token=bk_audit_settings.bk_data_token,
+            endpoint=bk_audit_settings.ot_endpoint,
+        )

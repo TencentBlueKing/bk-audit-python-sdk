@@ -272,6 +272,8 @@ BK_AUDIT_SETTINGS = {
     "formatter": "apps.audit.formatters.AuditFormatter",
     "exporters": ["bk_audit.contrib.opentelemetry.exporters.OTLogExporter"],
     "service_name_handler": "bk_audit.contrib.opentelemetry.utils.ServiceNameHandler",
+    "ot_endpoint": "http://127.0.0.1:4317",
+    "bk_data_token": "",
 }
 ```
 
@@ -279,12 +281,4 @@ BK_AUDIT_SETTINGS = {
 from bk_audit.contrib.bk_audit.client import bk_audit_client
 
 bk_audit_client.add_event(xxx)
-```
-
-如果需要使用 OT 上报，请勿修改 exporters 配置，在 Django Settings 增加 OT 日志对应的环境变量即可
-
-```shell
-BKAPP_OTEL_LOG_ENDPOINT=http://127.0.0.1:4317
-BKAPP_OTEL_LOG_BK_DATA_ID=0
-BKAPP_OTEL_LOG_BK_DATA_TOKEN=xxx
 ```

@@ -38,11 +38,22 @@ from bk_audit.contrib.opentelemetry.processor import LazyBatchLogProcessor
 OT_VERSION = version.parse(_ot_version)
 
 
-def setup(client):
+def setup(
+    client,
+    bk_data_id=None,
+    bk_data_token=None,
+    endpoint=None,
+):
     """
     初始化OT日志
     @type client: bk_audit.client.BkAudit
     @param client: 审计Client
+    @type bk_data_id: int
+    @param bk_data_id: Data ID
+    @type bk_data_token: str
+    @param bk_data_token: Data Token
+    @type endpoint: str
+    @param endpoint: 上报地址
     """
 
     if OT_VERSION < OTVersion.v1_11_0:
@@ -52,8 +63,8 @@ def setup(client):
 
     # init service config
     service_name = client.service_name
-    bk_data_id = int(os.getenv("BKAPP_OTEL_LOG_BK_DATA_ID", -1))
-    bk_data_token = os.getenv("BKAPP_OTEL_LOG_BK_DATA_TOKEN", "")
+    bk_data_id = bk_data_id or int(os.getenv("BKAPP_OTEL_LOG_BK_DATA_ID", -1))
+    bk_data_token = bk_data_token or os.getenv("BKAPP_OTEL_LOG_BK_DATA_TOKEN", "")
 
     # init log emitter
     log_emitter_provider = LogEmitterProvider(
@@ -67,7 +78,7 @@ def setup(client):
     processor: Type[LogProcessor] = LazyBatchLogProcessor
     if os.getenv("BKAPP_USE_SIMPLE_LOG_PROCESSOR"):
         processor = SimpleLogProcessor
-    exporter = OTLPLogExporter(endpoint=os.getenv("BKAPP_OTEL_LOG_ENDPOINT"))
+    exporter = OTLPLogExporter(endpoint=endpoint or os.getenv("BKAPP_OTEL_LOG_ENDPOINT"))
     log_emitter_provider.add_log_processor(processor(exporter))
 
     # init logging

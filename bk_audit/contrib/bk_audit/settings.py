@@ -41,6 +41,9 @@ class BKAuditSetting:
         else ["bk_audit.log.exporters.LoggerExporter"]
     )
     service_name_handler: str = "bk_audit.contrib.opentelemetry.utils.ServiceNameHandler"
+    ot_endpoint: str = ""
+    bk_data_id: str = ""
+    bk_data_token: str = ""
 
     def __post_init__(self):
         self.formatter = import_string(self.formatter)()
