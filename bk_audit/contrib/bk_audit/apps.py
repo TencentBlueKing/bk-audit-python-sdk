@@ -16,26 +16,22 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-from packaging import version
+import os
 
-DJANGO_SETTING_NAME = "BK_AUDIT_SETTINGS"
+from django.apps import AppConfig
+from django.utils.translation import gettext_lazy
 
-
-class LoggingDefaultConfig:
-    """Logging 默认配置"""
-
-    HANDLER_CLS = "logging.handlers.RotatingFileHandler"
-    FILE_MAX_BYTES = 1024 * 1024 * 100  # 10M
-    FILE_BACKUP_COUNT = 5
+from bk_audit.contrib.bk_audit.client import bk_audit_client
 
 
-class OTVersion:
-    """OT 更新版本"""
+class AuditConfig(AppConfig):
+    name = "bk_audit.contrib.bk_audit"
+    verbose_name = gettext_lazy("BK Audit")
 
-    # _log release
-    # https://github.com/open-telemetry/opentelemetry-python/releases/tag/v1.7.1
-    v1_7_1 = version.parse("1.7.1")
+    def ready(self):
+        if not os.getenv("BKAPP_OTEL_LOG_ENDPOINT"):
+            return
 
-    # Change OTLPHandler to LoggingHandler
-    # https://github.com/open-telemetry/opentelemetry-python/pull/2528
-    v1_11_0 = version.parse("1.11.0")
+        from bk_audit.contrib.opentelemetry.setup import setup
+
+        setup(bk_audit_client)

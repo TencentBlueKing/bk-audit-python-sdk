@@ -16,26 +16,13 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-from packaging import version
+from dataclasses import asdict
 
-DJANGO_SETTING_NAME = "BK_AUDIT_SETTINGS"
+from bk_audit.client import BkAudit
+from bk_audit.contrib.bk_audit.settings import bk_audit_settings
 
-
-class LoggingDefaultConfig:
-    """Logging 默认配置"""
-
-    HANDLER_CLS = "logging.handlers.RotatingFileHandler"
-    FILE_MAX_BYTES = 1024 * 1024 * 100  # 10M
-    FILE_BACKUP_COUNT = 5
-
-
-class OTVersion:
-    """OT 更新版本"""
-
-    # _log release
-    # https://github.com/open-telemetry/opentelemetry-python/releases/tag/v1.7.1
-    v1_7_1 = version.parse("1.7.1")
-
-    # Change OTLPHandler to LoggingHandler
-    # https://github.com/open-telemetry/opentelemetry-python/pull/2528
-    v1_11_0 = version.parse("1.11.0")
+bk_audit_client = BkAudit(
+    bk_app_code=bk_audit_settings.get_app_code(),
+    bk_app_secret=bk_audit_settings.get_app_secret(),
+    settings=asdict(bk_audit_settings),
+)
