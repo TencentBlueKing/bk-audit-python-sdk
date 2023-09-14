@@ -25,7 +25,7 @@ from django.core.mail.backends.locmem import EmailBackend
 from django.test import override_settings
 
 from bk_audit.constants.contrib import LoggingDefaultConfig
-from bk_audit.constants.utils import LOGGER_NAME
+from bk_audit.constants.utils import LOGGER_NAME, OT_LOGGER_NAME
 from bk_audit.contrib.django.formatters import DjangoFormatter
 from bk_audit.contrib.django.loggers import LoggingConfigHandler
 from bk_audit.log.models import AuditContext
@@ -99,7 +99,7 @@ class TestDjango(TestCase):
         app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
         app_config.ready()
 
-    @override_settings(BK_AUDIT_SETTINGS={})
+    @override_settings()
     def test_auto_instrument_ot(self):
         """测试OT注入"""
 
@@ -111,3 +111,6 @@ class TestDjango(TestCase):
 
         app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
         app_config.ready()
+
+        # 清理 Logger 避免影响其他的单元测试
+        logging.getLogger(OT_LOGGER_NAME).handlers = []
