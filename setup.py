@@ -18,6 +18,9 @@ to the current version of the project delivered to anyone in the future.
 
 from setuptools import setup
 
+with open("readme.md") as f:
+    readme = f.read()
+
 setup(
     name="bk-audit",
     version="1.0.8",
@@ -25,6 +28,8 @@ setup(
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
     description="Bk Audit SDK",
+    long_description=readme,
+    long_description_content_type="text/markdown",
     packages=[
         "bk_audit",
         "bk_audit.constants",
