@@ -21,7 +21,7 @@ from example.client import bk_audit_client
 from example.models import Host, HostInstance, HostResourceType, User, ViewFileAction
 
 if __name__ == "__main__":
-    context = AuditContext(user=User())
+    context = AuditContext(user=User(), scope_type="project", scope_id="bk-audit")
     bk_audit_client.add_event(
         action=ViewFileAction,
         resource_type=HostResourceType,
