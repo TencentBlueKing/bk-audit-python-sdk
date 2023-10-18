@@ -48,6 +48,8 @@ class AuditEvent(object):
         start_time=0,
         end_time=0,
         bk_app_code=DEFAULT_EMPTY_VALUE,
+        scope_type=DEFAULT_EMPTY_VALUE,
+        scope_id=DEFAULT_EMPTY_VALUE,
         access_type=AccessTypeEnum.OTHER,
         access_source_ip=DEFAULT_EMPTY_VALUE,
         access_user_agent=DEFAULT_EMPTY_VALUE,
@@ -85,6 +87,10 @@ class AuditEvent(object):
         @param end_time: 事件结束时间
         @type bk_app_code: str
         @param bk_app_code: 事件上报模块
+        @type scope_type: str
+        @param scope_type: 管理空间类型
+        @type scope_id: str
+        @param scope_id: 管理空间ID
         @type access_type: int
         @param access_type: 访问方式
         @type access_source_ip: str
@@ -124,6 +130,8 @@ class AuditEvent(object):
         self.start_time = int(start_time) or get_current_ms_ts()
         self.end_time = int(end_time) or get_current_ms_ts()
         self.bk_app_code = bk_app_code
+        self.scope_type = scope_type
+        self.scope_id = scope_id
         self.access_type = int(access_type)
         self.access_source_ip = access_source_ip
         self.access_user_agent = access_user_agent
@@ -287,6 +295,8 @@ class AuditContext(object):
         user_identify_tenant_id=DEFAULT_EMPTY_VALUE,
         user_identify_src=DEFAULT_EMPTY_VALUE,
         user_identify_src_username=DEFAULT_EMPTY_VALUE,
+        scope_type=DEFAULT_EMPTY_VALUE,
+        scope_id=DEFAULT_EMPTY_VALUE,
         **kwargs
     ):
         """
@@ -308,6 +318,10 @@ class AuditContext(object):
         @param user_identify_src: 操作人账号来源
         @type user_identify_src_username: str
         @param user_identify_src_username: 操作人账号
+        @type scope_type: str
+        @param scope_type: 管理空间类型
+        @type scope_id: str
+        @param scope_id: 管理空间ID
         @rtype: AuditContext
         """
         self.username = username
@@ -319,5 +333,7 @@ class AuditContext(object):
         self.user_identify_tenant_id = user_identify_tenant_id
         self.user_identify_src = user_identify_src
         self.user_identify_src_username = user_identify_src_username
+        self.scope_type = scope_type
+        self.scope_id = scope_id
         for key, val in kwargs.items():
             setattr(self, key, val)

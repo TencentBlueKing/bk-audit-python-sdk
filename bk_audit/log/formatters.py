@@ -126,6 +126,8 @@ class Formatter(BaseFormatter):
             user_identify_src_username=audit_context.user_identify_src_username,
             start_time=start_time,
             end_time=end_time,
+            scope_type=audit_context.scope_type,
+            scope_id=audit_context.scope_id,
             access_type=audit_context.access_type,
             access_source_ip=audit_context.access_source_ip,
             access_user_agent=audit_context.access_user_agent,
