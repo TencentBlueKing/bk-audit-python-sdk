@@ -27,7 +27,7 @@ with open(readme_path) as f:
 
 setup(
     name="bk-audit",
-    version="1.1.0rc0",
+    version="1.1.1",
     author="blueking",
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
