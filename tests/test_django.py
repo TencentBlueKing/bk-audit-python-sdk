@@ -117,3 +117,39 @@ class TestDjango(TestCase):
 
         # 清理 Logger 避免影响其他的单元测试
         logging.getLogger(OT_LOGGER_NAME).handlers = []
+
+    @override_settings()
+    def test_resource(self):
+        """测试调用Resource"""
+
+        # 初始化
+
+        from bk_audit.contrib.bk_audit.apps import AuditConfig
+
+        app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
+        app_config.ready()
+
+        # 更新格式化器
+
+        from bk_audit.contrib.bk_audit.client import bk_audit_client
+
+        bk_audit_client.set_formatter(DjangoFormatter())
+
+        # 测试正常、异常、标准异常、未实现三种状态
+
+        from tests.base.resources import (
+            BlueErrorResource,
+            EmptyResource,
+            ErrorResource,
+            Resource,
+        )
+
+        Resource().request()
+        with self.assertRaises(Exception):
+            ErrorResource().request()
+        with self.assertRaises(Exception):
+            BlueErrorResource().request()
+        with self.assertRaises(NotImplementedError):
+            print(EmptyResource().audit_action)
+        with self.assertRaises(NotImplementedError):
+            print(EmptyResource().name)
