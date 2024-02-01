@@ -24,20 +24,7 @@ from tests.base.exceptions import BlueError
 from tests.base.models import Request
 
 
-class EmptyResource(AuditMixinResource):
-    @property
-    def audit_action(self):
-        return super().audit_action
-
-    @property
-    def name(self):
-        return super().name
-
-    def perform_request(self, validated_request_data):
-        return
-
-
-class Resource(EmptyResource):
+class Resource(AuditMixinResource):
     name = "Resource"
     audit_action = Action(id="test")
 
@@ -58,3 +45,8 @@ class ErrorResource(Resource):
 class BlueErrorResource(Resource):
     def perform_request(self, validated_request_data):
         raise BlueError()
+
+
+class NoAuditResource(AuditMixinResource):
+    def perform_request(self, validated_request_data):
+        return
