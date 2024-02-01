@@ -62,7 +62,8 @@ class AuditEvent(TypedDict):
     extend_data: Optional[dict]
 
 
-class AuditMixin:
+# noinspection PyCompatibility
+class AuditMixin(abc.ABC):
     """
     审计集成
     """
@@ -70,19 +71,19 @@ class AuditMixin:
     _tmp_context: object
     _audit_event: AuditEvent
     _bk_audit_client_path = "bk_audit.contrib.bk_audit.client.bk_audit_client"
+    name: str
 
     @cached_property
     def _bk_audit_client(self) -> BkAudit:
         return import_string(self._bk_audit_client_path)
 
     @property
-    @abc.abstractmethod
-    def audit_action(self) -> Union[AuditAction, SimpleAction, Action]:
+    def audit_action(self) -> Optional[Union[AuditAction, SimpleAction, Action]]:
         """
         操作
         """
 
-        raise NotImplementedError()
+        return None
 
     @property
     def audit_resource_type(self) -> Optional[Union[AuditResourceType, SimpleResourceType, ResourceType]]:
@@ -160,16 +161,16 @@ class AuditMixinResource(Resource, AuditMixin, abc.ABC):
         super().__init__(context=context)
         self._tmp_context = Empty()
 
-    @property
-    @abc.abstractmethod
-    def name(self) -> str:
-        raise NotImplementedError()
-
     def request(self, request_data=None, **kwargs):
         """
         调用Resource
         """
 
+        # 判定是否需要上报审计事件
+        if not self._enabled_audit_report():
+            return super().request(request_data=request_data, **kwargs)
+
+        # 初始化审计事件
         self._audit_event = self._init_audit_event(request_data=request_data, **kwargs)
 
         try:
@@ -188,3 +189,10 @@ class AuditMixinResource(Resource, AuditMixin, abc.ABC):
             # 上报前处理审计事件
             self._before_add_event()
             self._bk_audit_client.add_event(**self._audit_event)
+
+    def _enabled_audit_report(self) -> bool:
+        """
+        判定是否需要上报审计事件
+        """
+
+        return self.audit_action is not None

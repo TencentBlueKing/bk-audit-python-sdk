@@ -123,14 +123,12 @@ class TestDjango(TestCase):
         """测试调用Resource"""
 
         # 初始化
-
         from bk_audit.contrib.bk_audit.apps import AuditConfig
 
         app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
         app_config.ready()
 
         # 更新格式化器
-
         from bk_audit.contrib.bk_audit.client import bk_audit_client
 
         bk_audit_client.set_formatter(DjangoFormatter())
@@ -139,17 +137,14 @@ class TestDjango(TestCase):
 
         from tests.base.resources import (
             BlueErrorResource,
-            EmptyResource,
             ErrorResource,
+            NoAuditResource,
             Resource,
         )
 
+        NoAuditResource().request()
         Resource().request()
         with self.assertRaises(Exception):
             ErrorResource().request()
         with self.assertRaises(Exception):
             BlueErrorResource().request()
-        with self.assertRaises(NotImplementedError):
-            print(EmptyResource().audit_action)
-        with self.assertRaises(NotImplementedError):
-            print(EmptyResource().name)
