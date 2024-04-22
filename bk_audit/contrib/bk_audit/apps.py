@@ -21,14 +21,14 @@ import os
 from django.apps import AppConfig
 from django.utils.translation import gettext_lazy
 
-from bk_audit.contrib.bk_audit.settings import bk_audit_settings
-
 
 class AuditConfig(AppConfig):
     name = "bk_audit.contrib.bk_audit"
     verbose_name = gettext_lazy("BK Audit")
 
     def ready(self):
+        from bk_audit.contrib.bk_audit.settings import bk_audit_settings
+
         if not bk_audit_settings.ot_endpoint and not os.getenv("BKAPP_OTEL_LOG_ENDPOINT"):
             return
 
