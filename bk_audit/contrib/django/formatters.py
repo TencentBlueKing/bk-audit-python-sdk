@@ -77,7 +77,6 @@ class DjangoFormatter(Formatter):
             audit_context.access_type = self.get_access_type(request)
             audit_context.access_source_ip = self.get_access_source_ip(request)
             audit_context.access_user_agent = self.get_access_user_agent(request)
-            audit_context.user_identify_type = UserIdentifyTypeEnum.UNKNOWN
             audit_context.user_identify_tenant_id = DEFAULT_EMPTY_VALUE
         return super(DjangoFormatter, self).build_event(
             action=action,
