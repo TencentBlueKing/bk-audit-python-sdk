@@ -18,8 +18,8 @@ to the current version of the project delivered to anyone in the future.
 
 import abc
 import datetime
-import sys
-from typing import Optional, Union
+from functools import cached_property
+from typing import Optional, TypedDict, Union
 
 from bk_resource import Resource
 from bk_resource.base import Empty
@@ -38,13 +38,6 @@ from bk_audit.log.models import (
     AuditInstance,
     AuditResourceType,
 )
-
-if sys.version_info >= (3, 8):
-    from functools import cached_property
-    from typing import TypedDict
-else:
-    cached_property = property
-    from typing_extensions import TypedDict
 
 
 # noinspection PyCompatibility
