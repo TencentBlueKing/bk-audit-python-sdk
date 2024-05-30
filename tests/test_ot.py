@@ -24,7 +24,6 @@ from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 from opentelemetry.sdk._logs import LogData, LogRecord
 from opentelemetry.sdk.util.instrumentation import InstrumentationScope
 
-from bk_audit.constants.contrib import OTVersion
 from bk_audit.contrib.opentelemetry.exporters import OTLogExporter
 from bk_audit.contrib.opentelemetry.processor import LazyBatchLogProcessor
 from bk_audit.contrib.opentelemetry.setup import setup
@@ -56,12 +55,6 @@ class TestOT(TestCase):
     def test_setup(self):
         """测试OT初始化"""
         setup(self.client)
-
-    @patch("bk_audit.contrib.opentelemetry.setup.OT_VERSION", OTVersion.v1_7_1)
-    def test_setup_1_7_1(self):
-        """测试OT初始化(v1.7.1)"""
-        with self.assertRaises(ImportError):
-            setup(self.client)
 
     def test_service_name(self):
         """测试基类"""

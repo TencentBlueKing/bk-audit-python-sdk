@@ -16,10 +16,10 @@ We undertake not to change the open source license (MIT license) applicable
 to the current version of the project delivered to anyone in the future.
 """
 
-from opentelemetry.sdk._logs.export import BatchLogProcessor
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 
 
-class LazyBatchLogProcessor(BatchLogProcessor):
+class LazyBatchLogProcessor(BatchLogRecordProcessor):
     def __init__(self, *args, **kwargs):
         super(LazyBatchLogProcessor, self).__init__(*args, **kwargs)
         # shutdown
@@ -52,4 +52,4 @@ class LazyBatchLogProcessor(BatchLogProcessor):
     def force_flush(self, timeout_millis=None):
         if self._shutdown or self._worker_thread is None:
             return True
-        super().force_flush(timeout_millis)
+        super(LazyBatchLogProcessor, self).force_flush(timeout_millis)

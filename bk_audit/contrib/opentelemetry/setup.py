@@ -20,22 +20,14 @@ import logging
 import os
 from typing import Type
 
+from opentelemetry._logs import set_logger_provider
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
-from opentelemetry.sdk._logs import (
-    LogEmitterProvider,
-    LogProcessor,
-    set_log_emitter_provider,
-)
-from opentelemetry.sdk._logs.export import SimpleLogProcessor
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler, LogRecordProcessor
+from opentelemetry.sdk._logs.export import SimpleLogRecordProcessor
 from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.version import __version__ as _ot_version
-from packaging import version
 
-from bk_audit.constants.contrib import OTVersion
 from bk_audit.constants.utils import OT_LOGGER_NAME
 from bk_audit.contrib.opentelemetry.processor import LazyBatchLogProcessor
-
-OT_VERSION = version.parse(_ot_version)
 
 
 def setup(
@@ -56,34 +48,30 @@ def setup(
     @param endpoint: 上报地址
     """
 
-    if OT_VERSION < OTVersion.v1_11_0:
-        from opentelemetry.sdk._logs import OTLPHandler as LoggingHandler
-    else:
-        from opentelemetry.sdk._logs import LoggingHandler
-
     # init service config
     service_name = client.service_name
     bk_data_id = bk_data_id or int(os.getenv("BKAPP_OTEL_LOG_BK_DATA_ID", -1))
     bk_data_token = bk_data_token or os.getenv("BKAPP_OTEL_LOG_BK_DATA_TOKEN", "")
 
     # init log emitter
-    log_emitter_provider = LogEmitterProvider(
+    logger_provider = LoggerProvider(
         resource=Resource.create(
-            {"service.name": service_name, "bk_data_id": bk_data_id, "bk.data.token": bk_data_token}
+            {
+                "service.name": service_name,
+                "bk_data_id": bk_data_id,
+                "bk.data.token": bk_data_token,
+            }
         )
     )
-    set_log_emitter_provider(log_emitter_provider)
+    set_logger_provider(logger_provider)
 
     # init exporter
-    processor: Type[LogProcessor] = LazyBatchLogProcessor
+    processor: Type[LogRecordProcessor] = LazyBatchLogProcessor
     if os.getenv("BKAPP_USE_SIMPLE_LOG_PROCESSOR"):
-        processor = SimpleLogProcessor
+        processor = SimpleLogRecordProcessor
     exporter = OTLPLogExporter(endpoint=endpoint or os.getenv("BKAPP_OTEL_LOG_ENDPOINT"))
-    log_emitter_provider.add_log_processor(processor(exporter))
+    logger_provider.add_log_record_processor(processor(exporter))
 
     # init logging
-    handler = LoggingHandler(
-        level=logging.NOTSET,
-        log_emitter=log_emitter_provider.get_log_emitter(service_name),
-    )
+    handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
     logging.getLogger(OT_LOGGER_NAME).addHandler(handler)
