@@ -27,7 +27,7 @@ with open(readme_path) as f:
 
 setup(
     name="bk-audit",
-    version="1.2.2",
+    version="1.2.3b0",
     author="blueking",
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
@@ -48,7 +48,7 @@ setup(
         "bk_iam",
     ],
     extras_require={
-        # OT 仅支持 Py3.6 及以上版本
+        # OT 仅支持 Py3.8 及以上版本
         "opentelemetry": [
             "protobuf>=3.19.5",
             "opentelemetry-api>=1.20.0",
@@ -61,11 +61,13 @@ setup(
         ],
     },
     classifiers=[
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.10, <4",
+    python_requires=">=3.8, <4",
 )
