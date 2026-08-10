@@ -254,11 +254,17 @@ bk_audit_client = BkAudit(bk_app_code="APP_CODE", bk_app_secret="SECRET_KEY", se
 
 ### 同步上报
 
-默认的日志上报处理使用多线程的方式，对主线程无感知，若主线程提前退出可能导致日志丢失，若需要使用同步的方式上报，即等待日志上报成功再退出主线程，请添加如下环境变量
+默认的日志上报处理使用多线程的方式（标准 `BatchLogRecordProcessor`），对主线程无感知，若主线程提前退出可能导致日志丢失，若需要使用同步的方式上报，即等待日志上报成功再退出主线程，请添加如下环境变量
 
 ```shell
 BKAPP_USE_SIMPLE_LOG_PROCESSOR=1
 ```
+
+### 版本说明（v1.3.0 起）
+
+- Python 支持范围为 3.10 - 3.14（OTel 1.42.0 起要求 `requires_python>=3.10`），3.8/3.9 请使用 bk-audit ≤1.2.3
+- `opentelemetry` extra 锁定 OTel 版本为 `>=1.43.0,<1.44.0`，`protobuf>=5.0`
+- `LazyBatchLogProcessor` 为历史兼容类名：旧版通过操作 OTel 私有成员实现「首次上报才启动 worker 线程」的懒启动；自 OTel 1.34 起官方已在标准 `BatchLogRecordProcessor` 内建 fork 安全（`os.register_at_fork` + pid 变化自动重建 daemon worker），本类行为等价于标准 `BatchLogRecordProcessor`，`setup()` 完成即启动上报线程（daemon，不阻塞进程退出）
 
 ### Django 自动集成
 

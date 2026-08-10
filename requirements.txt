@@ -1,11 +1,13 @@
 # IAM
 bk_iam
 
-# OT
-protobuf==3.19.5
-opentelemetry-api>=1.20.0
-opentelemetry-sdk>=1.20.0
-opentelemetry-exporter-otlp>=1.20.0
+# OT（锁定 OTel 1.43.x；protobuf 对齐 opentelemetry-proto 1.43.0 自身约束）
+protobuf>=5.0,<8.0
+opentelemetry-api>=1.43.0,<1.44.0
+opentelemetry-sdk>=1.43.0,<1.44.0
+opentelemetry-exporter-otlp>=1.43.0,<1.44.0
 
 # bk_resource
 bk_resource==0.4.11
+# bk_resource（<=0.4.14）依赖的 pipes 模块在 Py3.13 被移除（PEP 594），上游未修复，补兼容 shim
+pipes-compat; python_version >= "3.13"

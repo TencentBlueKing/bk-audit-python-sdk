@@ -22,12 +22,12 @@ from setuptools import setup
 
 current_directory = os.path.abspath(os.path.dirname(__file__))
 readme_path = os.path.join(current_directory, "readme.md")
-with open(readme_path) as f:
+with open(readme_path, encoding="utf-8") as f:
     readme = f.read()
 
 setup(
     name="bk-audit",
-    version="1.2.3b0",
+    version="1.3.0b0",
     author="blueking",
     url="https://bk.tencent.com",
     author_email="blueking@tencent.com",
@@ -48,12 +48,12 @@ setup(
         "bk_iam",
     ],
     extras_require={
-        # OT 仅支持 Py3.8 及以上版本
+        # OT 锁定 1.43.x（protobuf 对齐 opentelemetry-proto 1.43.0 自身约束）
         "opentelemetry": [
-            "protobuf>=3.19.5",
-            "opentelemetry-api>=1.20.0",
-            "opentelemetry-sdk>=1.20.0",
-            "opentelemetry-exporter-otlp>=1.20.0",
+            "protobuf>=5.0,<8.0",
+            "opentelemetry-api>=1.43.0,<1.44.0",
+            "opentelemetry-sdk>=1.43.0,<1.44.0",
+            "opentelemetry-exporter-otlp>=1.43.0,<1.44.0",
         ],
         # BKResource 仅支持 Py3.6 及以上版本
         "bk_resource": [
@@ -61,13 +61,13 @@ setup(
         ],
     },
     classifiers=[
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.8, <4",
+    python_requires=">=3.10, <4",
 )

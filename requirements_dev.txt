@@ -1,17 +1,17 @@
 # 代码规范
-pre-commit==2.9.2
-flake8==3.7.8
-seed-isort-config==1.9.2
+pre-commit
+flake8
 
 # 测试
-coverage==6.2
-pytest==6.2.5
-pytest-cov==3.0.0
-pytest-django==4.4.0
-pytest-xdist==2.4.0
-pytest-html==3.1.1
-xmlrunner==1.7.7
-pyparsing==2.2.0
-PyYAML==6.0
+coverage>=7.8
+pytest>=8.4,<10
+pytest-cov>=5.0
+pytest-django>=4.9
+pytest-xdist>=3.6
+pytest-html>=4.1
+# 旧 xmlrunner==1.7.7 依赖 Py3.12 已移除的 unittest._TextTestResult，换维护中的 unittest-xml-reporting（同提供 xmlrunner 模块）
+unittest-xml-reporting>=3.2
+PyYAML>=6.0.2
 
-django>=3,<5
+# Django：3.10-3.13 解析到 5.2.x，3.14 解析到 6.x（6.0 起官方支持 3.14）
+django>=4.2,<7

@@ -20,36 +20,12 @@ from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 
 
 class LazyBatchLogProcessor(BatchLogRecordProcessor):
-    def __init__(self, *args, **kwargs):
-        super(LazyBatchLogProcessor, self).__init__(*args, **kwargs)
-        # shutdown
-        self._shutdown = True
-        with self._condition:
-            self._condition.notify_all()
-        self._worker_thread.join()
-        # clean worker thread
-        self._shutdown = False
-        self._worker_thread = None
+    """
+    历史兼容类名保留。
 
-    def emit(self, log_data) -> None:
-        # re init work thread
-        if self._worker_thread is None:
-            self._at_fork_reinit()
-        # emit
-        super(LazyBatchLogProcessor, self).emit(log_data)
-
-    def shutdown(self) -> None:
-        # shutdown
-        self._shutdown = True
-        with self._condition:
-            self._condition.notify_all()
-        # work thread exist
-        if self._worker_thread:
-            self._worker_thread.join()
-        # shutdown exporter
-        self._exporter.shutdown()
-
-    def force_flush(self, timeout_millis=None):
-        if self._shutdown or self._worker_thread is None:
-            return True
-        super(LazyBatchLogProcessor, self).force_flush(timeout_millis)
+    旧版本为规避 fork 后 worker 线程失效，通过操作 OTel 私有成员实现
+    「首次 emit 才启动 worker」的懒启动行为；
+    OTel >= 1.34 起 BatchLogRecordProcessor 内部重构并官方内建 fork 安全
+    （os.register_at_fork + pid 变化自动重建 daemon worker），
+    懒启动已无必要，本类行为等价于标准 BatchLogRecordProcessor。
+    """

@@ -1,5 +1,11 @@
 # 版本日志
 
+## v1.3.0
+
+- 支持 Python 3.14，OpenTelemetry 依赖升级为 >=1.43.0,<1.44.0
+- LazyBatchLogProcessor 不再懒启动（OTel 已内建 fork 安全），行为等价标准 BatchLogRecordProcessor
+- 不再支持 Python 3.8/3.9；protobuf 要求 >=5.0
+
 ## v1.2.3
 
 - 兼容 Python3.8

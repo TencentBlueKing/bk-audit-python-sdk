@@ -18,6 +18,7 @@ to the current version of the project delivered to anyone in the future.
 
 import logging
 import os
+import warnings
 from typing import Type
 
 from opentelemetry._logs import set_logger_provider
@@ -73,5 +74,15 @@ def setup(
     logger_provider.add_log_record_processor(processor(exporter))
 
     # init logging
-    handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
+    # LoggingHandler 自 OTel 1.40 起标记弃用（替代实现见 opentelemetry-instrumentation-logging，
+    # 待其 handler 形态稳定后迁移），当前 1.43.x 功能完整，仅局部抑制其构造告警
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            category=DeprecationWarning,
+            message=r".*LoggingHandler.*opentelemetry-sdk.*deprecated.*",
+        )
+        handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
     logging.getLogger(OT_LOGGER_NAME).addHandler(handler)
+
+    return logger_provider

@@ -17,8 +17,11 @@ to the current version of the project delivered to anyone in the future.
 """
 
 import logging
+import os
 import uuid
+import warnings
 from unittest import TestCase
+from unittest.mock import patch
 
 from django.conf import settings
 from django.core.mail.backends.locmem import EmailBackend
@@ -97,7 +100,35 @@ class TestDjango(TestCase):
         from bk_audit.contrib.bk_audit.apps import AuditConfig
 
         app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
-        app_config.ready()
+
+        with warnings.catch_warnings(record=True) as records:
+            warnings.simplefilter("always")
+            app_config.ready()
+
+        # ready() 后 OT Logger 已挂载 handler，且全程无 DeprecationWarning 透出
+        self.assertTrue(logging.getLogger(OT_LOGGER_NAME).handlers)
+        self.assertEqual([r for r in records if issubclass(r.category, DeprecationWarning)], [])
+
+        # 清理 Logger 避免影响其他的单元测试
+        logging.getLogger(OT_LOGGER_NAME).handlers = []
+
+    @override_settings()
+    def test_auto_instrument_simple(self):
+        """测试同步直报模式下的自动注入"""
+
+        from bk_audit.contrib.bk_audit.settings import bk_audit_settings
+
+        bk_audit_settings.ot_endpoint = "http://127.0.0.1"
+
+        from bk_audit.contrib.bk_audit.apps import AuditConfig
+
+        app_config = AuditConfig.create("bk_audit.contrib.bk_audit")
+
+        with patch.dict(os.environ, {"BKAPP_USE_SIMPLE_LOG_PROCESSOR": "1"}, clear=False):
+            app_config.ready()
+
+        # ready() 后 OT Logger 已挂载 handler
+        self.assertTrue(logging.getLogger(OT_LOGGER_NAME).handlers)
 
         # 清理 Logger 避免影响其他的单元测试
         logging.getLogger(OT_LOGGER_NAME).handlers = []
